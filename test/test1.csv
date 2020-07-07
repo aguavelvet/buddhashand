@@ -1,0 +1,11 @@
+ID, ProductType,  Product, Price
+1,  fruit, apple, 10
+2,  fruit, orange,15
+3,  fruit, pear,  8
+4,  fruit, cherry, 15
+5,  fruit, banana, 5
+6,  vegetable, broccoli , 10
+7,  vegetable, cauliflower, 10
+8,  vegetable, green onions, 3
+9,  vegetable, potato, 4
+10, vegetable, tomato, 6
