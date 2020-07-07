@@ -98,6 +98,21 @@ I have added a prefilter for test2.json. We now filter in only the fruits.
 |banana|5|False|5|
 
 
+# Control Flow:
+
+BuddahsHand.process() 
+    InputProvider.start () 
+        for each record from InputProvider:
+            InputHandler.handle(record)
+                orec = Transform.transform (record)
+                OutputHandler.handle (orec)
+           
+    InputProvider.done () 
+        InputProvider.done()
+        Transform.done()
+        OutputHandler.done()
+
+
 # Running Buddha's Hand:
 
 python3 main.py -m /my/bh/config/test1.json
