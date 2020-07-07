@@ -28,7 +28,7 @@ def usage (msg = None, ec = None):
     print('    expression parsing.  ')
     print('    Secondly, the tool is highly extensible.  The tool users can add in custom functions to drive ')
     print('    additional functionality. ')
-    print('    The readers is refered to https://github.com/aguavelvet/buddhashand for additional information.')
+    print('    The readers is referred to https://github.com/aguavelvet/buddhashand for additional information.')
     print('  Synopsis:')
     print('    --manifest (-m)  Manifest file that provides the necessary information for the run. The buddhashand')
     print('        *  input provider.  Input provider defines the input object that knows how to read in the input')

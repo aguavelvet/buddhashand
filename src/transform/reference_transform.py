@@ -21,39 +21,27 @@ class ReferenceTransformer(Transform):
 
     def transform (self, rec:dict) -> dict:
 
-        self._update_namespace(rec, False)
+        self._update_namespace(rec)
 
         # run the evaluation.  We are creating an output record  using the template known_directives and the
         # input values found in the in put record.  each field in the input record is updated in name space.
         out = {}
         for t in self.template.items():
-            print (t[0] + ' = ' + t[1])
-
-            fname = t[0]
-            _eval = t[1]
-
-            out[fname] = self.simple_eval.eval(_eval)
+            out[t[0]] = self.simple_eval.eval(t[1])
 
         return out
 
 
-    def _update_namespace (self, rec, prefix=False):
+    def _update_namespace (self, rec):
         '''
         update the evaluator name space with all the fields.  These values are then available to the expression parser
         as REC.FieldName
         :param rec: input record
         :return:
         '''
-        if prefix:
-            self.simple_eval.names['RECORD'] = rec
 
         for field in rec.items():
-            key = 'RECORD.' + field[0].strip() if prefix else field[0].strip()
-            val = field[1].strip()
-            print ('[' + key + '] = [' + val +']')
-
-            self.simple_eval.names[key] = val
-
+            self.simple_eval.names[field[0].strip()] = field[1].strip()
 
 
 if __name__ == "__main__":

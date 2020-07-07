@@ -22,6 +22,13 @@ class CSVInputProvider:
         self.reader = csv.DictReader(open(self.config['input'],'r',newline=''))
         self.header = None
 
+    def _strip (self, row:dict):
+        '''
+        strip white spaces from each column in the row.
+        :return:
+        '''
+        for k in row.keys():
+            row[k] = row[k].strip()
 
     def start (self):
         '''
@@ -31,6 +38,7 @@ class CSVInputProvider:
         '''
 
         for row in self.reader:
+            self._strip(row)
             self.handler.handle (row)
 
 
