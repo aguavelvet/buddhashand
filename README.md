@@ -47,6 +47,7 @@ SimpleEval allows the user to register user defined functions and operators.  By
 
 Buddha's hand is driven by a json based configuration file. See [test1.json](https://github.com/aguavelvet/buddhashand/blob/master/test/test1.json) as an example.
 
+
 ### Notes on test1.json 
 test1.json shows the flexibility of the use of SimpleEval in the transform section. In particular:
 * Product, ProductType, Price are symbols resolved at run time for each record.
@@ -96,6 +97,44 @@ I have added a prefilter for test2.json. We now filter in only the fruits.
 |pear|8|False|8|
 |cherry|15|True|9.0|
 |banana|5|False|5|
+
+
+### Notes on test3.json
+
+Example of output with prefilter persisting to JSON format.
+
+```json
+{
+    "comment" : "Buddha's hand samaple manifest directive. Buddhas hand is a simple streaming 'ETL' with decoupled Input, Transform and Output. By decoupling thes sub-components, we gain a tremendous amount of flexibility.  Moreover, because they are decoupled, we also reduce code complexity which results in easier to maintain code base. Secondly, any new providers (input and output) increases functionality of the code base. ",
+
+    
+    "input" : {
+	"comment" : "simple csv input provider. Since each of the steps are decoupled, it is very easy to isolate different types of providers. Fewer lines of code makes it also easier to debug.", 
+	"type" : "CSV",
+	"input" : "/home/kirby/dev/projects/buddhashand/test/test1.csv",
+	"delimiter" : ","
+    },
+    
+    "transform": {
+	"comment" : "transform here like map/reduce.  But Does not have to be.  Note that Product and Price are runtime variables that are resolved for each record.  Note also that the expression is natural python code snippet, which is very easily testable for correctness.  Lastly, 'mult' is a user defined functor. We need this method because the parser types all tokens as strings.  So, we need to convert $Price and '1.3' to numbers.",
+	"type" : "default",
+	"prefilter" : "ProductType == 'fruit'",
+	"transform" : {
+	    "Name" : "Product",
+	    "Price"   : "Price",
+	    "On Sale" : "True if ProductType == 'fruit' and Product == 'cherry' else False",
+	    "Sale Price" : "mult(Price,0.6) if Product == 'cherry' else Price"
+	}
+    },
+    
+    "output" : {
+	"type" : "JSON",
+	"output" : "/home/kirby/dev/projects/buddhashand/test/test3.out.json"
+    }
+}
+```
+
+
 
 
 # Control Flow:
