@@ -9,7 +9,7 @@ Buddha's hand is decomposed into three sections:
 * OutputHandler takes the transformed record and "persists" it to the persistent storage.  Although the term persistence is used here, but there is no reason why the output handlder could not behave more like a dispatcher.  For example, dispatching to a messaging queue. 
 
 By decoupling the sub-components, following benefits are realized:
-* Code is localized, smaller and therefore, easier to author and debug.
+* Code is localized, smaller and therefore, easier to author and debug.See [csv input provider](https://github.com/aguavelvet/buddhashand/blob/master/src/input/csv_input_provider.py)
 * Easier to integrate new code (say a new Input Provider)
 * Any addition to the project extends it's functionality significantly.
 
