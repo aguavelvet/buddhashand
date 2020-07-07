@@ -11,7 +11,7 @@ class ReferenceTransformer(Transform):
     def __init__(self, cfg:map):
 
         self.template = cfg['transform']
-
+        self.prefilter = cfg['prefilter'] if 'prefilter' in cfg else None
         # instantiate the simple evaluator.  Add our own registry as well.
         self.simple_eval = SimpleEval()
         self.simple_eval.functions.update(get_fn_registry())
@@ -23,11 +23,18 @@ class ReferenceTransformer(Transform):
 
         self._update_namespace(rec)
 
+        # if prefilter is defined, pre-filter the record first.
         # run the evaluation.  We are creating an output record  using the template known_directives and the
         # input values found in the in put record.  each field in the input record is updated in name space.
-        out = {}
-        for t in self.template.items():
-            out[t[0]] = self.simple_eval.eval(t[1])
+        filtered_in = True
+        if self.prefilter is not None:
+            filtered_in = self.simple_eval.eval(self.prefilter)
+
+        out = None
+        if filtered_in:
+            out = {}
+            for t in self.template.items():
+                out[t[0]] = self.simple_eval.eval(t[1])
 
         return out
 
