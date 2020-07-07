@@ -29,11 +29,7 @@ def inverse(x):
     return 'nan' if x == 0 else 1/ x
 
 def mult(x,y):
-
-    X = float(x) if type(x) == str else x
-    Y = float(y) if type(y) == str else y
-
-    return (float)(X*Y)
+    return (float)(float(x)*float(y))
 
 # ------------------------------------------------functions ------------------------------------------------------------
 

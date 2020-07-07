@@ -48,7 +48,11 @@ class ReferenceTransformer(Transform):
         '''
 
         for field in rec.items():
-            self.simple_eval.names[field[0].strip()] = field[1].strip()
+
+            if type(field[1]) is str:
+                self.simple_eval.names[field[0].strip()] = field[1].strip()
+            else:
+                self.simple_eval.names[field[0].strip()] = field[1]
 
 
 if __name__ == "__main__":

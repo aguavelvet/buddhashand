@@ -1,0 +1,26 @@
+{
+    "input" : {
+	"type"     : "MYSQL",
+	"host"     : "localhost",
+	"user"     : "dbqt",
+	"pswd"     : "Ub1qu1ty!@#",
+	"database" : "dbqt",
+	"sql"      : "select * from PRODUCT"
+    },
+    
+    "transform": {
+	"type" : "default",
+	"prefilter" : "ProductType == 'fruit'",
+	"transform" : {
+	    "Name" : "Product",
+	    "Price"   : "Price",
+	    "On Sale" : "True if Product == 'cherry' else False",
+	    "Sale Price" : "mult(Price,0.6) if Product == 'cherry' else Price"
+	}
+    },
+    
+    "output" : {
+	"type" : "JSON",
+	"output" : "/home/kirby/dev/projects/buddhashand/test/test4.out.json"
+    }
+}
