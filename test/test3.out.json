@@ -1,0 +1,32 @@
+[
+{
+    "Name": "apple",
+    "Price": "10",
+    "On Sale": false,
+    "Sale Price": "10"
+},
+{
+    "Name": "orange",
+    "Price": "15",
+    "On Sale": false,
+    "Sale Price": "15"
+},
+{
+    "Name": "pear",
+    "Price": "8",
+    "On Sale": false,
+    "Sale Price": "8"
+},
+{
+    "Name": "cherry",
+    "Price": "15",
+    "On Sale": true,
+    "Sale Price": 9.0
+},
+{
+    "Name": "banana",
+    "Price": "5",
+    "On Sale": false,
+    "Sale Price": "5"
+}
+]
