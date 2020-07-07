@@ -110,7 +110,6 @@ BuddahsHand.process()
            
     InputProvider.done () 
         InputProvider.done()
-        Transform.done()
         OutputHandler.done()
 ```
 
