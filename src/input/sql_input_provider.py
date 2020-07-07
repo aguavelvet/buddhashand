@@ -1,15 +1,14 @@
 
 
 from ..input_handler import InputHandler
+from ..input_provider import InputProvider
 
-class SQLInputProvider:
+class SQLInputProvider(InputProvider):
 
     def __init__(self, handler: InputHandler, config: map):
 
         self.handler = handler
         self.config = config
-
-
 
 
     def start (self):

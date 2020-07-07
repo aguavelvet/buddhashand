@@ -1,13 +1,13 @@
 import csv
 
 from ..input_handler import InputHandler
-
+from ..input_provider import InputProvider
 
 '''
 CSVInputProvider.  The class implements the Input Provider interface.
 
 '''
-class CSVInputProvider:
+class CSVInputProvider(InputProvider):
 
     def __init__(self, handler: InputHandler, config: map):
 

@@ -1,7 +1,8 @@
 
 from ..input_handler import InputHandler
+from ..input_provider import InputProvider
 
-class HttpInputProvider:
+class HttpInputProvider(InputProvider):
 
     def __init__(self, handler: InputHandler, config: map):
 
