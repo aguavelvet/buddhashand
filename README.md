@@ -100,6 +100,7 @@ I have added a prefilter for test2.json. We now filter in only the fruits.
 
 # Control Flow:
 
+```
 BuddahsHand.process() 
     InputProvider.start () 
         for each record from InputProvider:
@@ -111,7 +112,7 @@ BuddahsHand.process()
         InputProvider.done()
         Transform.done()
         OutputHandler.done()
-
+```
 
 # Running Buddha's Hand:
 
