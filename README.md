@@ -1,6 +1,8 @@
 # buddhashand
 
-Buddha's hand is a simple streaming ETL tool that provides a rich set of functionalities with the ability to easily extend its' features. The general useability can be described as follows. 
+Buddha's hand is a simple streaming ETL tool that provides a rich set of functionalities with the ability to easily extend its' features.  This tool was originally written in Java.  I have decided to reimplement using Python, as python is faster to implement than Java.  In the near future, minimally, I will include Java Interfaces.
+
+The general useability can be described as follows. 
 
 ## Sub-components
 Buddha's hand is decomposed into three sections:
