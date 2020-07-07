@@ -32,6 +32,8 @@ class CSVOutputHandler(OutputHandler):
     def done(self):
         if self.writer is not None:
             try:
+                self.writer.flush()
+                self.writer.close()
                 del self.writer
             except:
                 pass

@@ -72,6 +72,7 @@ if "__main__" == __name__:
         hand = Buddhashand(man)
         hand.process()
 
+
     except getopt.GetoptError as err:
         print (str(err))  # will print something like "option -a not recognized"
         usage(2)

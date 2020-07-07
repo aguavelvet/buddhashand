@@ -1,13 +1,36 @@
+import json
 from ..output_handler import OutputHandler
+
 
 class JsonOutputHandler(OutputHandler):
 
     def __init__(self, cfg):
-        self.config = cfg
 
+        if cfg['type'].upper() != 'JSON':
+            raise ValueError ("Invalid output type.  Expecting JSON.")
+
+        self.config = cfg
+        self.writer = None
 
     def handle(self, rec: map):
-        pass
+
+        if self.writer is None:
+            # if this is the first call, create a output file pointer and write the header.
+            outfile = self.config['output']
+            self.writer = open(outfile, 'w+')
+            self.writer.write('[\n')
+        else:
+            self.writer.write(',\n')
+
+        dump = json.dumps(rec, indent=4)
+        self.writer.write(dump)
 
     def done(self):
-        pass
+        if self.writer is not None:
+            try:
+                self.writer.write('\n]\n')
+                self.writer.flush()
+                self.writer.close()
+                del self.writer
+            except:
+                pass

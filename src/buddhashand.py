@@ -60,6 +60,7 @@ class Buddhashand(InputHandler):
 
         self.iprovider.start()
         self.iprovider.done()
+        self.ohandler.done()
 
         print (f'Processed {self.row_count} rows.  Filtered {self.filtered} rows with {self.err_count} errors.')
 
