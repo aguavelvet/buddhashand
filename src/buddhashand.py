@@ -1,0 +1,67 @@
+import os
+from .input_handler import InputHandler
+from .output_handler import OutputHandler
+from src.conf.factory import Factory
+
+from logging import log
+
+# ----------------------------------------------------------------------------------------------------------------------
+class Buddhashand(InputHandler):
+
+    def __init__(self, man: map):
+        self.man = man
+        self.iprovider = Factory.create_input_provider(self, man['input'])
+        self.transform = Factory.create_transformer(man['transform'])
+        self.ohandler  = Factory.create_output_handler(man['output'])
+
+        self.env = os.environ.copy()
+
+    def handle(self, rec: map):
+        '''
+        handle the input record. Dispatch to the transformer then to the output handler.
+        Note that what comes back from the transformer may be different from the input record, including
+        returning map reduced values or map increased values.
+
+        :param rec:
+        :return:
+        '''
+
+        # set up some environment variables that can be accessed by the down stream handlers
+        self.env['INPUT'] = rec
+        self.env['RECORD'] = rec
+
+        self.ohandler.handle(self.transform.transform(rec))
+
+
+
+    def process(self):
+        '''
+        process the pipe line.  start will for all intent and purpose hand over the driving process
+        over to the input handler.  It then will dispatch the input record to the Input Handler (which is implemented
+        here, but doesn't have to).  The input handler will dispatch to the transformer and finally to the
+        '''
+
+        self.iprovider.start()
+        self.iprovider.done()
+
+
+    def done  (self):
+        '''
+        be a good citizen.  clean up after yourself... Note that if we get an exception here,
+        there's not much we can do aside from logging it.
+        :return:
+        '''
+        try:
+            self.iprovider.done()
+        except Exception as ex:
+            log.warning(f'received exception {str(ex)} while cleaning up...')
+
+        try:
+            self.transform.done()
+        except Exception as ex:
+            log.warning(f'received exception {str(ex)} while cleaning up...')
+
+        try:
+            self.ohandler.done()
+        except Exception as ex:
+            log.warning(f'received exception {str(ex)} while cleaning up...')
