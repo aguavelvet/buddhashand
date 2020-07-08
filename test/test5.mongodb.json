@@ -1,0 +1,26 @@
+{
+    "input" : {
+	"type"       : "MONGODB",
+	"host"       : "localhost",
+	"port"       : 27017,
+	"database"   : "dbqt",
+	"collection" : "instrument",
+	"query"      : "{}",
+	"filter"     : "{\"Ticker\":1, \"PnL\":1}"
+    },
+    
+    "transform": {
+	"type" : "default",
+	"prefilter" : "",
+	"transform" : {
+	    "Ticker"     : "Ticker",
+	    "Var95"      : "var95(PnL)",
+	    "Volatility" : "volatility(PnL)"
+	}
+    },
+    
+    "output" : {
+	"type" : "CSV",
+	"output" : "/home/kirby/dev/projects/buddhashand/test/test5.out.csv"
+    }
+}

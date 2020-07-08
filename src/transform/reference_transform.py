@@ -27,7 +27,7 @@ class ReferenceTransformer(Transform):
         # run the evaluation.  We are creating an output record  using the template known_directives and the
         # input values found in the in put record.  each field in the input record is updated in name space.
         filtered_in = True
-        if self.prefilter is not None:
+        if self.prefilter is not None and self.prefilter != '':
             filtered_in = self.simple_eval.eval(self.prefilter)
 
         out = None

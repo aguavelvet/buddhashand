@@ -3,6 +3,7 @@
 this file contains a set of functtions that are available in the simple expression parser.
 for additional info, see: https://pypi.org/project/simpleeval/
 '''
+import numpy as np
 
 
 def get_fn_registry():
@@ -24,12 +25,38 @@ def unity(x):
 
 def inverse(x):
     '''
-        return 1/x
+        return 1/x.
     '''
     return 'nan' if x == 0 else 1/ x
 
+
 def mult(x,y):
+    '''
+    multiply two numbers.
+    '''
     return (float)(float(x)*float(y))
+
+
+def var95(pnl):
+    '''
+    calculate VaR95 of the given pln vector.
+    :param pnl:  PnL vector.
+    :return:  VaR95
+    '''
+    slist    = sorted(pnl)
+    percent = np.percentile(slist,95)
+
+    return percent
+
+
+def volatility(pnl, annualize=True):
+
+    vol = np.std(pnl)
+    if annualize:
+        vol = vol*np.sqrt(252)
+
+    return vol
+
 
 # ------------------------------------------------functions ------------------------------------------------------------
 
@@ -53,7 +80,9 @@ s_op_registry = {
 s_fn_registry = {
     "unity": unity,
     "inverse": inverse,
-    "mult": mult
+    "mult": mult,
+    "var95": var95,
+    "volatility" : volatility
 }
 
 s_op_registry = {

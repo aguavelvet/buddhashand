@@ -4,8 +4,8 @@ from ..output_handler import OutputHandler
 
 from src.input.csv_input_provider import CSVInputProvider
 from src.input.http_input_provider import HttpInputProvider
-from src.input.nosql_input_provider import NOSQLInputProvider
-from src.input.sql_input_provider import SQLInputProvider
+from src.input.mongodb_input_provider import MongoDBInputProvider
+from src.input.mysql_input_provider import MYSQLInputProvider
 
 from src.output.csv_output_handler import CSVOutputHandler
 from src.output.json_output_handler import JsonOutputHandler
@@ -29,10 +29,10 @@ class Factory(object):
                 p = CSVInputProvider(ihandler, man)
             elif type == 'HTTP':
                 p = HttpInputProvider(ihandler, man)
-            elif type == 'NOSQL':
-                p = NOSQLInputProvider(ihandler, man)
-            elif type == 'SQL':
-                p = SQLInputProvider(ihandler, man)
+            elif type == 'MONGODB':
+                p = MongoDBInputProvider(ihandler, man)
+            elif type == 'MYSQL':
+                p = MYSQLInputProvider(ihandler, man)
             else:
                 raise ValueError (f'Unrecognized Input Provider [{type}].')
         else:

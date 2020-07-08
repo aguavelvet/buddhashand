@@ -1,5 +1,13 @@
 import json
+import decimal
 from ..output_handler import OutputHandler
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
 
 
 class JsonOutputHandler(OutputHandler):
@@ -22,7 +30,7 @@ class JsonOutputHandler(OutputHandler):
         else:
             self.writer.write(',\n')
 
-        dump = json.dumps(rec, indent=4)
+        dump = json.dumps(rec, indent=4, cls=DecimalEncoder)
         self.writer.write(dump)
 
     def done(self):
