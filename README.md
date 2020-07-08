@@ -10,7 +10,7 @@ Buddha's hand is decomposed into three sections:
 	* csv
 	* mysql
 	* http (TBD)
-	* nosql (TBD)
+	* nosql (MongoDB)
 
 * Transform  Transform allows the user to modify, reduce or extend the incoming input record.
 * OutputHandler takes the transformed record and "persists" it to the persistent storage.  Although the term persistence is used here, but there is no reason why the output handlder could not behave more like a dispatcher.  For example, dispatching to a messaging queue. 
@@ -141,6 +141,32 @@ Example of output with prefilter persisting to JSON format.
 }
 ```
 
+### Notes on [test4.mysql.json](https://github.com/aguavelvet/buddhashand/blob/master/test/test4.mysql.json)
+
+This configuration shows a simple mysql input provider --> CSV output.
+Note that the SELECT statement is "SELECT * FROM PRODUCT".  We could have easily made it to be:  "SELECT * FROM PRODUCT WHERE ProductType = 'fruit'
+It's made more generic so you can see the prefilter capability of the transform section. Prefilter is useful, if we encounter a usecase that is difficult to express in SQL.
+
+Also note that the output is persisted as a JSON output.
+
+```
+[
+ {    "Name": "apple",     "Price": 10.0,    "On Sale": false,   "Sale Price": 10.0},
+ {    "Name": "orange",    "Price": 15.0,    "On Sale": false,   "Sale Price": 15.0},
+ {    "Name": "pear",      "Price": 8.0,     "On Sale": false,   "Sale Price": 8.0},
+ {    "Name": "cherry",    "Price": 15.0,    "On Sale": true,    "Sale Price": 9.0},
+ {    "Name": "banana",    "Price": 5.0,     "On Sale": false,   "Sale Price": 5.0}
+]
+```
+
+
+
+### Notes on [test5.mysql.json](https://github.com/aguavelvet/buddhashand/blob/master/test/test5.mongodb.json)
+
+This configuration file provides MongoDB input provider example persisted to CSV file.
+Input script to mongodb is [here](https://github.com/aguavelvet/buddhashand/blob/master/test/test5.mongody.py). For all intent and purpose, this example is interesting because it contains a Profit and Loss vector, with 252 PnL entries.  These entries are used to compute VaR95 and Volatility, hooked in the transform section.  
+
+The output is a simple [CSV file](https://github.com/aguavelvet/buddhashand/blob/master/test/test5.out.csv)
 
 
 
