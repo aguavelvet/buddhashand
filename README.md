@@ -1,6 +1,9 @@
-# buddhashand
+# Buddhashand
 
 Buddha's hand is a simple streaming ETL tool that provides a rich set of functionalities with the ability to easily extend its' features.  This tool was originally written in Java.  I have decided to reimplement using Python, as python is faster to implement than Java.  In the near future, minimally, I will include Java Interfaces.
+
+## Why [Buddha's hand](https://en.wikipedia.org/wiki/Buddha%27s_hand)?
+A while back, in a project, all the component names were based on citrus fruits. For example, API-Gateway was called Lemon, the database server was called Grape Fruit, etc.  Buddha's hand is a citrus fruit predominantly available in Asia.  As this fruit has many finger like segments, it was thought to be an appropriate name because thish tool could also extend it's use in many different areas.
 
 The general useability can be described as follows. 
 
@@ -33,6 +36,7 @@ There are 4 combination of potential use cases. (CSV->CSV), {CSV->JSON), (JSON->
 
 - HTTP (Provided that Http Response is handed with records.
 - NoSQL
+- SQL (Output Handler could be micro-batching for performance)
 - HDFS
 - Hive
 - Messaging Queue (As an inputprovider, this is an interesting case, since the tool runs infinitely)
@@ -43,7 +47,7 @@ Transform sub-component is responsible for making the transformation on the inpu
 
 * uses natural python code. So, easy to write and test. 
 * offers the richness of the expression parsing.
-* offers extensiblity.
+* offers extensiblity, through registration of functions and operators.
 
 ### Extensibility
 SimpleEval allows the user to register user defined functions and operators.  By registering these functions, it allows significant degree of freedom in the desired outcome. See [functors.py](https://github.com/aguavelvet/buddhashand/blob/master/src/transform/functors.py) for examples. 
@@ -187,8 +191,57 @@ BuddahsHand.process()
 
 # Running Buddha's Hand:
 
-python3 main.py -m /my/bh/config/test1.json
+```
+    python3 main.py -m /my/bh/config/test1.json
+```
 
 
+# Performance:
+Performance of Buddha's hand was never measured, neither for this implementation or the the original Java version.  There two reason for that:
+* BH was used as an enabling tool and not used in a mission critical setting.
+* In the production setting, nothing stood out that required attention
+
+## Memory
+Since this is a streaming tool, it has very small memory foot print.  
+
+## CPU
+This tool uses a expression parser. Therefore, performance is not that great. For each record, expression parser is executed multiple times.  Having said that, BH is a IO bound tool. Therefore, optimizing the expression parser code will not significantly increase the overall performance.
+
+Having said that, if optimization is desired, one could fold in desired expressions into a registered function.  For example, suppose you have the following expression:
+``` a*b*ln(a,b) ```
+You could write a function called foo that encapsulates the expression:
+```foo(a,b)
+
+def foo(a,b):
+    return a*b*ln(a,b)
+
+```
+
+# Blue Skying
+
+
+### Buddha's Hand chaining.  
+As one can chain map/reduce functionality,  We can also perform the same using multiple Buddha's hands.
+
+- Define Http Server Input Provider  (1/2 day developing time, using Flask)
+- Define Http Client Output Provider ( 2 hours development time)
+
+We now have a Transformation service that dispatches the transformation down the chain.  In a docker container, this chaining service could be easily deployed across a cloud environment.
+
+### Buddha's Hand as a multiplexor. 
+
+- Define Http Ouput Provider (Clients) that can connect to multiple servers. (1/2 day development)
+- Configure transform to bucketize the input record.  Something like ``` uuencode (ID) % N ```  Where N is the number of Http Clients. 
+
+### Refernce Key checker
+Since the expression parser allows us to register functions, there is no reason why we could not take advantage of this feature. One area where the functions could be used is to load foreign keys.  
+- On start up, load foreign keys from the database (1/2 day)
+- define ref_check(foreign_key) method.
+
+
+# Conclusion
+Buddhas hand is a simple tool that has many potential uses. It's configurability and ease of adding new features makes it a tool that can add value in many settings.  Personally, I think it would be a good tool in a data transformation area.  I welcome your comments.
+
+Thanks.  Kirby
 
 
