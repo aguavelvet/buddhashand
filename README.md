@@ -239,41 +239,55 @@ Since the expression parser allows us to register functions, there is no reason 
 - define ref_check(foreign_key) method.
 
 ### Work Flow Service
-The idea is to use the expression parser hooks to execute a set of tasks to solve a problem, using the mathematical rule of precendence and works entirely on the side effects. It's a bit far fetched, but I see no reason why it could not work. W will an example to illustrate how a work flow service could work.
+The idea is to use the expression parser hooks to execute a set of tasks to solve a problem, using the mathematical rule of precendence and works entirely on side effects. It's a bit far fetched, but I see no reason why it could not work. W will an example to illustrate how a work flow service could work.
 
-Input:
+We want to execute the following expression:
+
+```
+     report (simulate (load_db(dsname) + partition(dsname) ) ~+ (market_data(bus_date))))
+```
+
+**Input:**
 a single tuple that defines the parameter to a work flow.  (For example, dataset name, business date, runtime,  etc)
 
-Output:
+**Output:**
 
 a tuple that shows each step that was executed, success fail status.
 
-Transform:
-is an expression that represents the work flow.  
-
-For example:
-```
-     report (simulate (load_db(dsname) + partition(dsname) ) + (market_data(bus_date))))
-```
-
-So what would such an expression do?
-Firstly, we note that the expression would adhere to the arithmatic rule of precedence. So, '()' are grouped.  Of course, *,/,+,- followign their precedence rule, although it doesn't really make a lot of sense in this context.
-
-Let's assume that:
-- report is an aggregation service running on a node in a cluster.
+**Transform:**
+executes the expression where:
+- report is an aggregation service running on a node in a cluster somewhere.
 - load_db is a tool that extracts data from the database
 - partition is a bucketizing tool.
-- markte_data is a tool that grabs the market data for a given date.
+- market_data is a tool that grabs the market data for a given date.
+- ~+ is a parallelize symbol. It will execute LHS at the same time as RHS.
+
+Firstly, we note that the expression would adhere to the arithmatic rule of precedence. So, '()' are grouped.  Of course, *,/,+,- followign their precedence rule, although it doesn't really make a lot of sense in this context.
+
+We make no assumptions that these are in process tasks. In other words, these services could be a client/server call accessing any other service that might be available in the network.
 
 Then, according the the expression execution:
 
-- loads data from the database
-- runs the partition
-- runs simulation
-- loads market data
-- reports
+- simulate and market_data would execute in parallel
+- Simulate:
+	- load_db runs and loads data from the database. 
+	- partition the loaded data.
+- Market_data 
+	- runs parallel to Simulate
+- report waits until both simulate and market data finshes it's run.  
 
-in this sequence.  Of course, simulate and market_data should run in parallel, but the current expression parser does not support parallel processing.  Authoring a proprietary expression parser could address this need.  
+```
+def parallelize (lhs, rhs):
+    t1 = thread.start_new_thread (lhs) 
+    t2 = thread.start_new_thread (rhs)
+    t1.join ()
+    t2.join ()
+```
+
+**Cool Factor:**  11
+**Flexibility:** 10
+**Usefulness:**  ?
+
 
 # Conclusion
 Buddhas hand is a simple tool that has many potential uses. It's configurability and ease of adding new features makes it a tool that can add value in many settings.  Personally, I think it would be a good tool in a data transformation area.  I welcome your comments.
