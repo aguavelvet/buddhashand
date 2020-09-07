@@ -1,10 +1,8 @@
 import os
 from src.transformer import Transform
 from src.transform.functors import get_fn_registry
-
-
-from simpleeval import simple_eval
 from simpleeval import SimpleEval
+
 
 class ReferenceTransformer(Transform):
 
@@ -19,9 +17,27 @@ class ReferenceTransformer(Transform):
         # update the name space with runtime configuration variables as well. say -DDEBUG=verbose or something like it.
         self._update_namespace(os.environ)
 
-    def transform (self, rec:dict) -> dict:
 
-        self._update_namespace(rec)
+    def get_namespace_rec (self, tmap, irec):
+        orec = {}
+        for k,t in tmap.items():
+            # print (f' out field name = {k} in field name = {t} and value = {irec[t]}')
+            # print(irec)
+            # if k == 'operation_name':
+            #    print (f'Oh oh...... [{irec[t]}]')
+
+            # condition the output field value.  simple parser does not like ''
+            v = irec[t]
+            v = '' if v is None else str(v).strip()
+            orec[k] = '' if v == '' else self.simple_eval.eval(v)
+
+        print (orec)
+        return orec
+
+
+    def transform (self, irec:dict) -> dict:
+
+        self._update_namespace(irec)
 
         # if prefilter is defined, pre-filter the record first.
         # run the evaluation.  We are creating an output record  using the template known_directives and the
@@ -34,7 +50,17 @@ class ReferenceTransformer(Transform):
         if filtered_in:
             out = {}
             for t in self.template.items():
-                out[t[0]] = self.simple_eval.eval(t[1])
+                if len(t) != 2:
+                    raise ValueError (f'Could not retrieve key/value pair in transform template [{t}]. ')
+
+                if type(t[1]) is str:
+                    out[t[0]] = self.simple_eval.eval(t[1])
+                elif type(t[1]) is dict:
+                    out[t[0]] = self.get_namespace_rec (t[1], irec)
+                else:
+                    # TODO  Should make sure that the template is either namespace based or not. Cant mix.
+                    raise ValueError (f'Unhandled template type {type(t[1])}')
+
 
         return out
 
