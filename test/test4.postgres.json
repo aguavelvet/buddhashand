@@ -1,0 +1,22 @@
+{
+    "input" : {
+	"type"     : "POSTGRES",
+	"host"     : "localhost",
+	"port"     : 5433,
+	"user"     : "postgres",
+	"pswd"     : "postgres",
+	"database" : "fc_data",
+	"sql"      : "select * from my_table limit 100"
+    },
+    
+    "transform": {
+		"type": "IDENTITY",
+		"prefilter": "",
+		"transform": {}
+	},
+
+    "output" : {
+	"type" : "CSV",
+	"output" : "/home/kirby/dev/projects/buddhashand/test/postgres.out.csv"
+    }
+}
