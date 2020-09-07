@@ -1,4 +1,5 @@
 import os
+import traceback
 from .input_handler import InputHandler
 from .output_handler import OutputHandler
 from src.conf.factory import Factory
@@ -49,6 +50,7 @@ class Buddhashand(InputHandler):
         except Exception as ex:
             self.err_count += 1
             logger.error(str(ex))
+            logger.error(traceback.format_exc())
 
 
     def process(self):
