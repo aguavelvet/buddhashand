@@ -21,15 +21,26 @@ class ReferenceTransformer(Transform):
     def get_namespace_rec (self, tmap, irec):
         orec = {}
         for k,t in tmap.items():
+            # k is the output field name.
+            # t is the template to apply to. It could be a simple field value in the input record or it could be
+            #   some operation that requires the expression evaluator to execute.
+
             # print (f' out field name = {k} in field name = {t} and value = {irec[t]}')
             # print(irec)
             # if k == 'operation_name':
             #    print (f'Oh oh...... [{irec[t]}]')
 
             # condition the output field value.  simple parser does not like ''
-            v = irec[t]
-            v = '' if v is None else str(v).strip()
-            orec[k] = '' if v == '' else self.simple_eval.eval(v)
+
+            if t in irec:
+                # the template field simply contains the field to reference.  So, value is the input record value.
+                v = irec[t]
+                v = '' if v is None else str(v).strip()
+            else:
+                # the template t is not recognized as an input field.  Therefore, assume it is an expression.
+                v = self.simple_eval.eval(t)
+
+            orec[k] = v
 
         print (orec)
         return orec
@@ -72,6 +83,9 @@ class ReferenceTransformer(Transform):
         :param rec: input record
         :return:
         '''
+
+        self.simple_eval.names['RECORD'] = rec
+        self.simple_eval.names['INPUT'] = rec
 
         for field in rec.items():
 
