@@ -3,6 +3,7 @@
 this file contains a set of functtions that are available in the simple expression parser.
 for additional info, see: https://pypi.org/project/simpleeval/
 '''
+import json
 import numpy as np
 
 
@@ -58,6 +59,17 @@ def volatility(pnl, annualize=True):
     return vol
 
 
+def jsonify(field_names,  rec: map):
+
+    # ['scheddate', 'descr', wostatus'...]
+    jsn = {}
+    fields = field_names.split(',')
+    for f in fields:
+        f = f.strip()
+        jsn[f] = str(rec[f]).strip()
+
+    return json.dumps(jsn)
+
 # ------------------------------------------------functions ------------------------------------------------------------
 
 
@@ -82,7 +94,8 @@ s_fn_registry = {
     "inverse": inverse,
     "mult": mult,
     "var95": var95,
-    "volatility" : volatility
+    "volatility" : volatility,
+    "jsonify" : jsonify
 }
 
 s_op_registry = {
