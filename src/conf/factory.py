@@ -6,9 +6,12 @@ from src.input.csv_input_provider import CSVInputProvider
 from src.input.http_input_provider import HttpInputProvider
 from src.input.mongodb_input_provider import MongoDBInputProvider
 from src.input.mysql_input_provider import MYSQLInputProvider
+from src.input.psycopg2_input_provider import Psycopg2InputProvider
+from src.input.athena_input_provider import AthenaInputProvider
 
 from src.output.csv_output_handler import CSVOutputHandler
 from src.output.json_output_handler import JsonOutputHandler
+from src.output.composite_output_handler import CompositeOutputHandler
 
 from src.transformer import Transform
 from src.transform.identity_transform import IdentityTransformer
@@ -33,6 +36,10 @@ class Factory(object):
                 p = MongoDBInputProvider(ihandler, man)
             elif type == 'MYSQL':
                 p = MYSQLInputProvider(ihandler, man)
+            elif type == 'POSTGRES':
+                p = Psycopg2InputProvider(ihandler, man)
+            elif type == 'ATHENA':
+                p = AthenaInputProvider(ihandler, man)
             else:
                 raise ValueError (f'Unrecognized Input Provider [{type}].')
         else:
@@ -50,6 +57,8 @@ class Factory(object):
                 p = CSVOutputHandler(man)
             elif type == 'JSON':
                 p = JsonOutputHandler(man)
+            elif type == 'COMPOSITE':
+                p = CompositeOutputHandler(man)
             else:
                 raise ValueError (f'Unrecognized Input Provider [{type}].')
         else:
