@@ -39,8 +39,6 @@ class Buddhashand(InputHandler):
         self.env['INPUT'] = irec
         self.env['RECORD'] = irec
 
-        print (irec)
-
         try:
             # do not allow errors to propagate.  We want to continue on best effort basis.
             orec = self.transform.transform(irec)
