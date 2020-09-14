@@ -12,10 +12,14 @@ from src.input.athena_input_provider import AthenaInputProvider
 from src.output.csv_output_handler import CSVOutputHandler
 from src.output.json_output_handler import JsonOutputHandler
 from src.output.composite_output_handler import CompositeOutputHandler
+from src.output.psycopg2_output_handler import Psycopg2OutputHandler
 
 from src.transformer import Transform
 from src.transform.identity_transform import IdentityTransformer
 from src.transform.reference_transform import ReferenceTransformer
+
+
+from src.misc.memory_cache import MemoryCache
 
 
 from src.transform import identity_transform
@@ -57,6 +61,8 @@ class Factory(object):
                 p = CSVOutputHandler(man)
             elif type == 'JSON':
                 p = JsonOutputHandler(man)
+            elif type == 'POSTGRES':
+                p = Psycopg2OutputHandler(man)
             elif type == 'COMPOSITE':
                 p = CompositeOutputHandler(man)
             else:
@@ -80,3 +86,8 @@ class Factory(object):
             raise ValueError('Type is not specified in the input configuration.')
 
         return t
+
+
+    def create_mem_cache(man) -> MemoryCache:
+
+        return MemoryCache(man)
