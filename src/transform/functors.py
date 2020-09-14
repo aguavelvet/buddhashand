@@ -5,7 +5,7 @@ for additional info, see: https://pypi.org/project/simpleeval/
 '''
 import json
 import numpy as np
-
+from  ..misc.memory_cache import MemoryCache
 
 def get_fn_registry():
     return s_fn_registry
@@ -70,6 +70,21 @@ def jsonify(field_names,  rec: map):
 
     return json.dumps(jsn)
 
+
+def namespace_lookup(ns,key, dflt=''):
+    val = MemoryCache.get_value(ns,key)
+    return  dflt if val is None else val
+
+
+def default (val, dflt):
+    return dflt if val is None or val == '' else dflt
+
+
+def assert_not_null (fname, val):
+    if val is None:
+        raise ValueError(f'The field {fname} was found to be null.')
+    return val
+
 # ------------------------------------------------functions ------------------------------------------------------------
 
 
@@ -95,7 +110,11 @@ s_fn_registry = {
     "mult": mult,
     "var95": var95,
     "volatility" : volatility,
-    "jsonify" : jsonify
+    "jsonify" : jsonify,
+    "namespace_lookup" : namespace_lookup,
+    "default" : default,
+    "assert_not_null" : assert_not_null
+
 }
 
 s_op_registry = {
