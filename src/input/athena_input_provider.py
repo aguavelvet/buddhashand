@@ -2,8 +2,8 @@
 import os
 from pyathenajdbc import connect
 
-from ..input_handler import InputHandler
-from ..input_provider import InputProvider
+from src.input_handler import InputHandler
+from src.input_provider import InputProvider
 
 
 class AthenaInputProvider(InputProvider):

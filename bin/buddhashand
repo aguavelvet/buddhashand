@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. ../venv/bin/activate
+
+export PYTHONPATH=$PYTHONPATH:..
+
+echo python -m $1
+python ../src/main.py -m $1

@@ -67,11 +67,10 @@ if "__main__" == __name__:
         if manifest is None:
             usage ('Required parameter (manifest) was not specified.', 2)
 
-        man = json.load(open (manifest, 'r'))
+        man = json.load(open(manifest, 'r'))
 
         hand = Buddhashand(man)
         hand.process()
-
 
     except getopt.GetoptError as err:
         print (str(err))  # will print something like "option -a not recognized"

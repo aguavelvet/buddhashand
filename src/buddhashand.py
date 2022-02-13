@@ -1,7 +1,7 @@
 import os
 import traceback
-from .input_handler import InputHandler
-from .output_handler import OutputHandler
+from src.input_handler import InputHandler
+from src.output_handler import OutputHandler
 from src.conf.factory import Factory
 
 import logging
@@ -9,7 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class Buddhashand(InputHandler):
 
     def __init__(self, man: map):
@@ -19,7 +18,6 @@ class Buddhashand(InputHandler):
         if 'cache' in man:
             self.cache = Factory.create_mem_cache(man['cache'])
 
-
         self.iprovider = Factory.create_input_provider(self, man['input'])
         self.transform = Factory.create_transformer(man['transform'])
         self.ohandler  = Factory.create_output_handler(man['output'])
@@ -28,7 +26,6 @@ class Buddhashand(InputHandler):
         self.row_count = 0
         self.err_count = 0
         self.filtered  = 0
-
 
     def handle(self, irec: map):
         '''
@@ -58,7 +55,6 @@ class Buddhashand(InputHandler):
             logger.error(irec)
             logger.error(traceback.format_exc())
 
-
     def process(self):
         '''
         process the pipe line.  start will for all intent and purpose hand over the driving process
@@ -72,7 +68,7 @@ class Buddhashand(InputHandler):
 
         print (f'Processed {self.row_count} rows.  Filtered in {self.filtered} rows with {self.err_count} errors.')
 
-    def done  (self):
+    def done(self):
         '''
         be a good citizen.  clean up after yourself... Note that if we get an exception here,
         there's not much we can do aside from logging it.

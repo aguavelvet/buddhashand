@@ -17,7 +17,6 @@ class ReferenceTransformer(Transform):
         # update the name space with runtime configuration variables as well. say -DDEBUG=verbose or something like it.
         self._update_namespace(os.environ)
 
-
     def get_namespace_rec (self, tmap, irec):
         orec = {}
         for k,t in tmap.items():
@@ -71,8 +70,6 @@ class ReferenceTransformer(Transform):
                 else:
                     # TODO  Should make sure that the template is either namespace based or not. Cant mix.
                     raise ValueError (f'Unhandled template type {type(t[1])}')
-
-
         return out
 
 
@@ -87,6 +84,8 @@ class ReferenceTransformer(Transform):
         self.simple_eval.names['RECORD'] = rec
         self.simple_eval.names['INPUT'] = rec
 
+        # This loop takes each of the key:value pairs in the record and assigns them as variables
+        # that can be looked up in the transformation section
         for field in rec.items():
 
             if type(field[1]) is str:
@@ -103,8 +102,6 @@ if __name__ == "__main__":
 
     e.names['a'] = 3
     e.names['b'] = 4
-
-
 
     print(e.eval('1 + 3'))
     print (e.eval("'A' if a > b else 'B'"))

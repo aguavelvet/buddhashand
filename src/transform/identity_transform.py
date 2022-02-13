@@ -1,11 +1,11 @@
 
-
 from src.transformer import Transform
 
-'''
-Identity transformer. 
-'''
+
 class IdentityTransformer(Transform):
+    '''
+         Identity Transformer
+    '''
 
     def __init__(self, cfg:map):
         pass
