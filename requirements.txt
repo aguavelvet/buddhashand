@@ -18,7 +18,7 @@ llvmlite==0.34.0
 mock==2.0.0
 mysql-connector-python==8.0.21
 numba==0.51.0
-numpy==1.19.1
+numpy==1.22.0
 oauth2client==3.0.0
 packaging==20.4
 pandas==1.1.0
