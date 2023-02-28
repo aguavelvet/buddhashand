@@ -104,15 +104,17 @@ def assert_not_null (fname, val):
 
 
 def randrange (start: int, end: int):
-    return random.randrange(start,end)
+    return random.randrange(start, end)
 
 
 def randelem(elements: str):
 
     elems = elements.split(',')
+    result = elems[random.randrange(0, len(elems))]
+    return result.strip();
 
-    return elements[random.randrange(0, len(elems))]
-
+def faisal (superdude: str):
+    print (" I am a god")
 
 def randdob(startY, endY):
 
@@ -163,6 +165,7 @@ s_fn_registry = {
     "xpaths" : xpaths,
     "randrange" : randrange,
     "randelem" : randelem,
-    "randdob"  : randdob
+    "randdob"  : randdob,
+    "dufus" : faisal
 }
 

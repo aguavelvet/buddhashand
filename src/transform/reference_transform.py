@@ -31,17 +31,20 @@ class ReferenceTransformer(Transform):
 
             # condition the output field value.  simple parser does not like ''
 
-            if t in irec:
+            if isinstance(t,str) and t in irec:
                 # the template field simply contains the field to reference.  So, value is the input record value.
                 v = irec[t]
                 v = '' if v is None else str(v).strip()
+            elif isinstance(t,(int, float)):
+                v = t
+            elif isinstance(t,dict):
+                v = self.get_namespace_rec(t,irec)
             else:
                 # the template t is not recognized as an input field.  Therefore, assume it is an expression.
                 v = self.simple_eval.eval(t)
 
             orec[k] = v
 
-        print (orec)
         return orec
 
 
@@ -66,7 +69,7 @@ class ReferenceTransformer(Transform):
                 if type(t[1]) is str:
                     out[t[0]] = self.simple_eval.eval(t[1])
                 elif type(t[1]) is dict:
-                    out[t[0]] = self.get_namespace_rec (t[1], irec)
+                    out[t[0]] = self.get_namespace_rec(t[1], irec)
                 else:
                     # TODO  Should make sure that the template is either namespace based or not. Cant mix.
                     raise ValueError (f'Unhandled template type {type(t[1])}')

@@ -9,6 +9,7 @@ from src.input.psycopg2_input_provider import Psycopg2InputProvider
 from src.input.athena_input_provider import AthenaInputProvider
 from src.input.linebased_input_provider import LineBasedInputProvider
 from src.input.range_input_provider import RangeInputProvider
+from src.input.template_list_input_provider import TemplateListInputProvider
 
 from src.output.csv_output_handler import CSVOutputHandler
 from src.output.json_output_handler import JsonOutputHandler
@@ -48,6 +49,8 @@ class Factory(object):
                 p = AthenaInputProvider(ihandler, man)
             elif type == 'RANGE':
                 p = RangeInputProvider(ihandler, man)
+            elif type == 'TEMPLATE_LIST':
+                p = TemplateListInputProvider(ihandler, man)
             else:
                 raise ValueError (f'Unrecognized Input Provider [{type}].')
         else:

@@ -11,4 +11,4 @@ class IdentityTransformer(Transform):
         pass
 
     def transform (self, rec: dict) -> dict:
-        return rec
+        return rec['INPUT'] if ('INPUT' in rec) else rec

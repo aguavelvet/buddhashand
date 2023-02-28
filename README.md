@@ -10,10 +10,14 @@ The general useability can be described as follows.
 ## Sub-components
 Buddha's hand is decomposed into three sections:
 * InputProvider handles the reading the input source on a per record basis. Currenlty supports:
-	* csv
-	* mysql
+  	* Athena
+  	* csv
 	* http (TBD)
-	* nosql (MongoDB)
+	* line based input
+	* mongodb
+	* mysql
+	* psycopg2
+	* range (useful for template generation)
 
 * Transform  Transform allows the user to modify, reduce or extend the incoming input record.
 * OutputHandler takes the transformed record and "persists" it to the persistent storage.  Although the term persistence is used here, but there is no reason why the output handlder could not behave more like a dispatcher.  For example, dispatching to a messaging queue. 

@@ -14,6 +14,8 @@ see <http://www.gnu.org/licenses/>.
 
 import getopt, sys
 import json
+import os
+
 from src.buddhashand import Buddhashand
 
 
@@ -46,10 +48,42 @@ def usage (msg = None, ec = None):
     sys.exit(ec)
 
 
+def add_env (env_var: str):
+    vars = env_var.split(',')
+    for var in vars:
+        parts = var.split('=')
+        key = parts[0].strip()
+        val = parts[1].strip()
+
+        os.environ[key] = val
+
+        print(f"Added {key} = {val} to the environment")
+
+
+def load(manifest):
+
+    with open(manifest, 'r') as file:
+        content = file.read()
+        x = content.find("${")
+        while x > 0:
+            y = content.find("}", x)
+            if y < 0:
+                raise ValueError ("malformed variable. Variables should be in ${VARNAME} format")
+            var = content[x+2:y]
+            if var not in os.environ:
+                raise ValueError (f"Could not resolve {var}")
+            val = os.environ[var]
+
+            content = content.replace("${"+var+"}", val)
+            x = content.find("${")
+
+    return json.loads(content)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 if "__main__" == __name__:
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hm:v", ["help", "manifest=", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "hvm:D:", ["help", "verbose", "manifest=", "D="])
 
         manifest = None
         verbose = False
@@ -61,14 +95,15 @@ if "__main__" == __name__:
                 sys.exit()
             elif o in ("-m", "--manifest"):
                 manifest = a
+            elif o.startswith("-D"):
+                add_env(a)
             else:
-                usage (f'unhandled option {o}', 2)
+                usage(f'unhandled option {o}', 2)
 
         if manifest is None:
-            usage ('Required parameter (manifest) was not specified.', 2)
+            usage('Required parameter (manifest) was not specified.', 2)
 
-        man = json.load(open(manifest, 'r'))
-
+        man = load(manifest)
         hand = Buddhashand(man)
         hand.process()
 

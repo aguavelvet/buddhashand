@@ -4,5 +4,5 @@
 
 export PYTHONPATH=$PYTHONPATH:..
 
-echo python -m $1
-python ../src/main.py -m $1
+echo python  $*
+python ../src/main.py $*
