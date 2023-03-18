@@ -3,13 +3,16 @@
 this file contains a set of functtions that are available in the simple expression parser.
 for additional info, see: https://pypi.org/project/simpleeval/
 '''
-import json
+import os
 import random
+import openai
+import requests
 
 import numpy as np
 from  ..misc.memory_cache import MemoryCache
 import json
 from jsonpath_ng import jsonpath, parse
+
 
 def get_fn_registry():
     return s_fn_registry
@@ -18,6 +21,15 @@ def get_fn_registry():
 def get_op_registry():
     return s_op_registry
 
+
+def get_infa_session():
+    return s_session
+
+def set_infa_session(session):
+    s_session = session
+
+
+openai.api_key = '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'
 
 # ------------------------------------------------functions ------------------------------------------------------------
 def unity(x):
@@ -113,9 +125,6 @@ def randelem(elements: str):
     result = elems[random.randrange(0, len(elems))]
     return result.strip();
 
-def faisal (superdude: str):
-    print (" I am a god")
-
 def randdob(startY, endY):
 
     y = random.randrange(startY, endY)
@@ -131,6 +140,54 @@ def randdob(startY, endY):
     d = random.randrange(1,M)
 
     return f"{y}-{m}-{d}"
+
+def chatgpt (prompt):
+    response = openai.Completion.create(model="text-davinci-003",
+                                        prompt=prompt, temperature=0,
+                                        max_tokens=7)
+    return response
+
+def geocode(addy):
+    URL = "http://maps.googleapis.com/maps/api/geocode/json"
+
+    # sending get request and saving the response as response object
+    r = requests.get(url=URL, params={'address': addy})
+
+    # extracting data in json format
+    data = r.json()
+
+    # of the first matching location
+    #latitude = data['results'][0]['geometry']['location']['lat']
+    #longitude = data['results'][0]['geometry']['location']['lng']
+    #formatted_address = data['results'][0]['formatted_address']
+    return data
+
+
+def infa_login(user,password):
+    session = get_infa_session()
+    if 'sessionId' not in session:
+        IICS = 'https://qa-ma.rel.infaqa.com/identity-service/api/v1/Login'
+        session = requests.post(IICS,json={"username": user,"password":password},headers={
+            "encoding":"UTF-8",
+            "Content-Type" : "application/json"
+        })
+        set_infa_session(session)
+
+    return session
+
+def get_be(be):
+    session = infa_login("kirbyprivate","Password@1")
+
+    URL = 'https://internal-a24f3677d852144a28a327da2e2bd70a-1945347265.us-west-2.elb.amazonaws.com/metadata/api/v2/objects/businessEntity/c360.person'
+    content = session.json()
+    headers = {
+        "IDS-SESSION-ID":content['sessionId'],
+        "INFA-MDM-CORRELATION-ID": 'correlationId',
+        "Content-Type": "application/json"
+    }
+    # result = requests.get(url=URL, headers=headers)
+
+    return content['sessionId']
 
 
 # ------------------------------------------------functions ------------------------------------------------------------
@@ -150,7 +207,7 @@ s_op_registry = {
 }
 
 # ------------------------------------------------operators ------------------------------------------------------------
-
+s_session = {}
 
 s_fn_registry = {
     "unity": unity,
@@ -166,6 +223,8 @@ s_fn_registry = {
     "randrange" : randrange,
     "randelem" : randelem,
     "randdob"  : randdob,
-    "dufus" : faisal
+    "chatgpt" : chatgpt,
+    "geocode" : geocode,
+    "get_be" : get_be
 }
 

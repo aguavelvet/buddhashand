@@ -21,6 +21,7 @@ from src.output.mongo_output_handler import  MongoOutputHandler
 from src.transformer import Transform
 from src.transform.identity_transform import IdentityTransformer
 from src.transform.reference_transform import ReferenceTransformer
+from src.transform.dynamic_transform import DynamicTransformer
 
 from src.misc.memory_cache import MemoryCache
 from src.transform import identity_transform
@@ -90,6 +91,8 @@ class Factory(object):
                 t = ReferenceTransformer(man)
             elif type == 'IDENTITY':
                 t = IdentityTransformer(man)
+            elif type == 'DYNAMIC':
+                t = DynamicTransformer(man)
             else:
                 raise ValueError(f'Unrecognized Input Provider [{type}].')
         else:
